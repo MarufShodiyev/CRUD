@@ -1,14 +1,23 @@
 let selectedRow = null;
 function onFormSubmit(e) {
   event.preventDefault();
-  let formDate = readFormDate();
-  if (selectedRow === null) {
-    insertNewDate(formDate);
+  let formData = readFormDate();
+  let res = 1;
+  Object.keys(formData).forEach((key) => {
+    if (!formData[key]) {
+      res = 0;
+      return;
+    }
+  });
+  if (!res) {
+    alert("malumot to'liq kiriting");
+  } else if (selectedRow === null) {
+    insertNewDate(formData);
   } else {
-    updateRecord(formDate);
+    updateRecord(formData);
   }
   resetForm();
-  console.log(formDate);
+  console.log(formData);
 }
 
 function readFormDate() {
@@ -20,9 +29,7 @@ function readFormDate() {
   return formDate;
 }
 function insertNewDate(date) {
-  let table = document
-    .getElementById("storeList")
-    .getElementsByTagName("tbody")[0];
+  let table = document.getElementById("storeList");
   let newRow = table.insertRow(table.length);
   let cell1 = newRow.insertCell(0);
   cell1.innerHTML = date.productCode;
@@ -34,7 +41,6 @@ function insertNewDate(date) {
   cell4.innerHTML = date.perPrice;
   let cell5 = newRow.insertCell(4);
   cell5.innerHTML = `<button onclick="onEdit(this)">edit</button> <button onclick="onDelete(this)">delete</button>`;
-
 }
 
 function onEdit(td) {
